@@ -139,10 +139,10 @@ gcloud projects add-iam-policy-binding $PROJECT\_ID  --member=serviceAccount:$(g
 
 ## Setup Cloud Source Repository
 
-1. Clone the following [repository](https://github.com/GoogleCloudPlatform/professional-services/tree/main/examples/secure-software-delivery) to your local machine 
+1. Clone the following [repository](https://github.com/GoogleCloudPlatform/cloud-build-software-delivery) to your local machine
 
 ```
-git clone <https://github.com/GoogleCloudPlatform/professional-services/tree/main/examples/secure-software-delivery>
+git clone <https://github.com/GoogleCloudPlatform/cloud-build-software-delivery>
 ```
 2. Push the cloned repo to your own [Cloud Source](https://source.cloud.google.com/repo/create) repository.
 ```
