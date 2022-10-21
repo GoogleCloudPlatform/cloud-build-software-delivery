@@ -58,7 +58,7 @@ steps:
         gcloud artifacts docker images list-vulnerabilities $(cat /workspace/scan_id.txt) \
         --format='value(vulnerability.effectiveSeverity)' | grep 'HIGH'| wc -l>/workspace/total.txt; \
 
-        if [[ $(cat /workspace/total.txt) -gt 8 ]] ; then echo 'CVE failed' && exit 1; else echo 'CVE passed'; fi
+        if [[ $(cat /workspace/total.txt) -gt 3 ]] ; then echo 'CVE failed' && exit 1; else echo 'CVE passed'; fi
 
   - name: 'gcr.io/$PROJECT_ID/cloudbuild-attestor'
     id: '6 Attest Image (Binary Auth)'

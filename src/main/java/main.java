@@ -31,7 +31,7 @@ public class main {
 
         System.out.println(ADMIN_LOGIN+":"+ADMIN_PASSWORD);
         for (int i=0; i<10000; i++) {
-            System.out.print("Hello world TMSC- 9 ");
+            System.out.print("Hello world");
             System.out.println(i);
             try {
                 Thread.sleep(1000, 0);

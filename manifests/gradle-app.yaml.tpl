@@ -25,7 +25,7 @@ spec:
     runAsGroup: 3000
     fsGroup: 2000
   containers:
-    - image: us-central1-docker.pkg.dev/balesh-sce/gradle-project/gradle-project-image@DIGEST
+    - image: australia-southeast1-docker.pkg.dev/sec-soft-chain/sec-soft-chain-repo/image@DIGEST
       name: gradle-app
       resources:
         requests:

@@ -19,7 +19,7 @@ WORKDIR /home/gradle/src
 
 RUN gradle build --no-daemon
 
-FROM openjdk:20-slim-buster
+FROM openjdk:20-slim
 
 RUN mkdir /app
 
