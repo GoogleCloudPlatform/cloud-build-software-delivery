@@ -12,17 +12,19 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FROM gradle:7.5.1-jdk18-alpine AS build
+#Build Step
+FROM gradle:8.0.2-jdk17-alpine AS build
 
 COPY --chown=gradle:gradle . /home/gradle/src
 WORKDIR /home/gradle/src
 
 RUN gradle build --no-daemon
 
-FROM openjdk:20-slim
+# Run Step
+FROM openjdk:21-slim-buster
 
 RUN mkdir /app
-
+# Copy from Build to Run steps
 COPY --from=build /home/gradle/src/build/libs/*.jar /app/gradle-application.jar
 COPY --from=build /home/gradle/src/manifests/gradle-app.yaml.tpl /app/gradle-app.yaml.tpl
 

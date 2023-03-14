@@ -30,7 +30,7 @@ steps:
       - '-c'
       - |
         docker run --rm -i hadolint/hadolint hadolint -f json - < ./Dockerfile > /workspace/res.txt ; \
-        if [[ $(cat res.txt | wc -c) -gt 2 ]] ; then echo 'Static Analysis failed' && cat res.txt && exit 1; else echo 'Linting passed'; fi
+        if [[ $(cat res.txt | wc -c) -gt 3 ]] ; then echo 'Static Analysis failed' && cat res.txt && exit 1; else echo 'Linting passed'; fi
 
   - name: 'gcr.io/cloud-builders/docker'
     id: '2 Build Docker Image'
