@@ -13,7 +13,7 @@
 # limitations under the License.
 
 #Build Step
-FROM gradle:8.0.2-jdk17-alpine AS build
+FROM gradle:8.6.0-jdk17-alpine AS build
 
 COPY --chown=gradle:gradle . /home/gradle/src
 WORKDIR /home/gradle/src
@@ -21,7 +21,7 @@ WORKDIR /home/gradle/src
 RUN gradle build --no-daemon
 
 # Run Step
-FROM openjdk:21-slim-buster
+FROM openjdk:23-slim-bullseye
 
 RUN mkdir /app
 # Copy from Build to Run steps

@@ -107,11 +107,15 @@ Build steps can be broken down into categories like:
 
 ```
 
+# Set environment variables on Mac/Linux
 PROJECT\_ID=sec-soft-chain
 REGION=australia-southeast1
 ZONE=australia-southeast1-b
 
-# Create a project and set as default
+# Set your project as the current project
+gcloud config set project $PROJECT_ID
+
+# Or if you want a new project, Create a project and set as default
 gcloud projects create $PROJECT\_ID –set-as-default 
 
 # Enable the Required API’s
@@ -121,20 +125,20 @@ gcloud services enable ondemandscanning.googleapis.com
 gcloud services enable cloudkms.googleapis.com
 gcloud services enable binaryauthorization.googleapis.com
 
-# Create a cluster for this demo, not production ready settings being used here
-gcloud beta container --project $PROJECT\_ID clusters create "software-secure-supply" --zone $ZONE --no-enable-basic-auth --cluster-version "1.22.8-gke.201" --release-channel "regular" --machine-type "e2-standard-4" --image-type "COS\_CONTAINERD" --disk-type "pd-standard" --disk-size "100" --metadata disable-legacy-endpoints=true --scopes "https://www.googleapis.com/auth/devstorage.read\_only","https://www.googleapis.com/auth/logging.write","https://www.googleapis.com/auth/monitoring","https://www.googleapis.com/auth/servicecontrol","https://www.googleapis.com/auth/service.management.readonly","https://www.googleapis.com/auth/trace.append" --max-pods-per-node "110" --num-nodes "2" --logging=SYSTEM,WORKLOAD --monitoring=SYSTEM --enable-ip-alias --network "projects/$PROJECT\_ID/global/networks/default" --subnetwork "projects/$PROJECT\_ID/regions/$REGION/subnetworks/default" --no-enable-intra-node-visibility --default-max-pods-per-node "110" --no-enable-master-authorized-networks --addons HorizontalPodAutoscaling,HttpLoadBalancing,GcePersistentDiskCsiDriver --enable-autoupgrade --enable-autorepair --max-surge-upgrade 1 --max-unavailable-upgrade 1 --enable-shielded-nodes --node-locations $ZONE --enable-binauthz
+# Create a cluster for this demo, these commands do not provision a production ready cluster
+gcloud beta container --project $PROJECT_ID clusters create "software-secure-supply" --no-enable-basic-auth --cluster-version "1.27.8-gke.1067004" --release-channel "regular" --machine-type "e2-medium" --image-type "COS_CONTAINERD" --disk-type "pd-balanced" --disk-size "100" --metadata disable-legacy-endpoints=true --scopes "https://www.googleapis.com/auth/devstorage.read_only","https://www.googleapis.com/auth/logging.write","https://www.googleapis.com/auth/monitoring","https://www.googleapis.com/auth/servicecontrol","https://www.googleapis.com/auth/service.management.readonly","https://www.googleapis.com/auth/trace.append" --num-nodes "3" --logging=SYSTEM,WORKLOAD --monitoring=SYSTEM --enable-ip-alias --network "projects/$PROJECT_ID/global/networks/default" --subnetwork "projects/$PROJECT_ID/regions/$REGION/subnetworks/default" --no-enable-intra-node-visibility --default-max-pods-per-node "110" --security-posture=standard --workload-vulnerability-scanning=disabled --no-enable-master-authorized-networks --addons GcePersistentDiskCsiDriver --enable-autoupgrade --enable-autorepair --max-surge-upgrade 1 --max-unavailable-upgrade 1   --binauthz-evaluation-mode=PROJECT_SINGLETON_POLICY_ENFORCE --enable-shielded-nodes --node-locations $REGION
 
 # Create an Artifact Repository
-gcloud artifacts repositories create "${PROJECT\_ID}-repo" --location=$REGION  --repository-format=docker
+gcloud artifacts repositories create "$PROJECT_ID-repo" --location=$REGION  --repository-format=docker
 
 # Allow the Cloud Build Service Account to run scans
-gcloud projects add-iam-policy-binding $PROJECT\_ID  --member=serviceAccount:$(gcloud projects describe $PROJECT\_ID --format="value(projectNumber)")@cloudbuild.gserviceaccount.com --role=roles/ondemandscanning.admin 
+gcloud projects add-iam-policy-binding $PROJECT_ID  --member=serviceAccount:$(gcloud projects describe $PROJECT_ID --format="value(projectNumber)")@cloudbuild.gserviceaccount.com --role=roles/ondemandscanning.admin 
 
 # Allow the Cloud Build Service Account to deploy to GKE
-gcloud projects add-iam-policy-binding $PROJECT\_ID  --member=serviceAccount:$(gcloud projects describe $PROJECT\_ID --format="value(projectNumber)")@cloudbuild.gserviceaccount.com --role=roles/container.developer
+gcloud projects add-iam-policy-binding $PROJECT_ID  --member=serviceAccount:$(gcloud projects describe $PROJECT_ID --format="value(projectNumber)")@cloudbuild.gserviceaccount.com --role=roles/container.developer
 
 # Allow Cloud Build Service Account the permission to attest
-gcloud projects add-iam-policy-binding $PROJECT\_ID  --member=serviceAccount:$(gcloud projects describe $PROJECT\_ID --format="value(projectNumber)")@cloudbuild.gserviceaccount.com --role=roles/containeranalysis.notes.attacher
+gcloud projects add-iam-policy-binding $PROJECT_ID  --member=serviceAccount:$(gcloud projects describe $PROJECT_ID --format="value(projectNumber)")@cloudbuild.gserviceaccount.com --role=roles/containeranalysis.notes.attacher
 ```
 
 ## Setup Cloud Source Repository
